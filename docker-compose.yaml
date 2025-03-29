@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  tarantool:
+    image: tarantool/tarantool:latest
+    container_name: tarantool
+    ports:
+      - "3301:3301"
+    volumes:
+      - ./init.lua:/etc/tarantool/instances.enabled/init.lua
+      - tarantool_data:/var/lib/tarantool
+    command: tarantool /etc/tarantool/instances.enabled/init.lua
+    networks:
+      - tarantool-net
+
+  mattermost-bot-vote:
+    build: .
+    container_name: mattermost-bot-vote
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      tarantool:
+        condition: service_healthy
+    networks:
+      - tarantool-net
+
+networks:
+  tarantool-net:
+    driver: bridge
+
+volumes:
+  tarantool_data:
