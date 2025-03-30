@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/tarantool/go-tarantool"
 	"os"
 	"os/signal"
 	"regexp"
@@ -51,7 +52,7 @@ func main() {
 	}
 
 	var err error
-	if app.voteRepo, err = NewVoteRepository(); err != nil {
+	if app.voteRepo, err = NewVoteRepository(tarantool.Opts{User: app.config.tarantoolUser, Pass: app.config.tarantoolPass}); err != nil {
 		app.logger.Fatal().Err(err).Msg("Connection Tarantool error")
 	}
 	app.logger.Info().Msg("Tarantool ready!")
