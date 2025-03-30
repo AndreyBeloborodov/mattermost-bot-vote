@@ -52,7 +52,13 @@ func main() {
 	}
 
 	var err error
-	if app.voteRepo, err = NewVoteRepository(tarantool.Opts{User: app.config.tarantoolUser, Pass: app.config.tarantoolPass}); err != nil {
+	if app.voteRepo, err = NewVoteRepository(
+		app.config.tarantoolHost,
+		app.config.tarantoolPort,
+		tarantool.Opts{
+			User: app.config.tarantoolUser,
+			Pass: app.config.tarantoolPass,
+		}); err != nil {
 		app.logger.Fatal().Err(err).Msg("Connection Tarantool error")
 	}
 	app.logger.Info().Msg("Tarantool ready!")
@@ -171,7 +177,7 @@ func handlePost(app *application, post *model.Post) {
 	}
 
 	// Обрабатываем команду "/vote result"
-	if regexp.MustCompile(`^/vote result`).MatchString(post.Message) {
+	if regexp.MustCompile(`^/vote results`).MatchString(post.Message) {
 		handleVoteResult(app, post)
 		return
 	}

@@ -15,8 +15,8 @@ type VoteRepository struct {
 }
 
 // NewVoteRepository Создаём новое соединение с базой данных
-func NewVoteRepository(opts tarantool.Opts) (*VoteRepository, error) {
-	client, err := tarantool.Connect("localhost:3301", opts)
+func NewVoteRepository(host, port string, opts tarantool.Opts) (*VoteRepository, error) {
+	client, err := tarantool.Connect(host+port, opts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to Tarantool: %v", err)
 	}

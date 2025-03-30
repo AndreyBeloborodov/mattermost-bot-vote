@@ -12,8 +12,11 @@ type config struct {
 	mattermostTeamName string
 	mattermostToken    string
 	mattermostServer   *url.URL
-	tarantoolUser      string
-	tarantoolPass      string
+
+	tarantoolUser string
+	tarantoolPass string
+	tarantoolHost string
+	tarantoolPort string
 }
 
 func loadConfig() config {
@@ -25,6 +28,8 @@ func loadConfig() config {
 	settings.mattermostServer, _ = url.Parse(os.Getenv("MM_SERVER"))
 	settings.tarantoolUser = os.Getenv("TT_USER")
 	settings.tarantoolPass = os.Getenv("TT_PASS")
+	settings.tarantoolHost = os.Getenv("TT_HOST")
+	settings.tarantoolPort = os.Getenv("TT_PORT")
 
 	return settings
 }
